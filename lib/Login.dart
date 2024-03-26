@@ -1,26 +1,36 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'package:login_interface/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'homeScreen.dart';
+
+ String? token;
 
 class login extends StatelessWidget {
   login({super.key});
 
   TextEditingController userctr = TextEditingController();
   TextEditingController passctr = TextEditingController();
-
   String url = "https://crm-beta-api.vozlead.in/api/v2/account/login/";
 
-  apiPostDatata(context) async {
+  apiPostData(context) async {
     var body = {
-      "email": userctr.text,
-      "password": passctr.text,
+      "username": userctr.text.trim(),
+      "password": passctr.text.trim(),
     };
-    var headers;
-
-    final response = await http.post(Uri.parse(url),  headers: headers, body: body);
+    final response = await http.post(
+      Uri.parse(url),
+      body: body,
+    );
+    print(response.body);
     if (response.statusCode == 200) {
+      final res = jsonDecode(response.body);
+
+      final data = LocalStorage();
+
+      token = res["data"]["token"];
+      data.getApi(token!);
+
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const HomeScreen(),
       ));
@@ -93,6 +103,7 @@ class login extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: TextFormField(
+                    controller: userctr,
                     decoration: const InputDecoration(
                         hintText: "user name",
                         hintStyle: TextStyle(
@@ -121,6 +132,7 @@ class login extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: TextFormField(
+                    controller: passctr,
                     decoration: const InputDecoration(
                         hintText: "Password",
                         hintStyle: TextStyle(
@@ -159,7 +171,7 @@ class login extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                apiPostDatata(context);
+                apiPostData(context);
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 15.0, right: 15, top: 10),
