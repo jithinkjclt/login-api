@@ -2,17 +2,14 @@ import 'dart:convert';
 import 'package:login_interface/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_interface/postMethode.dart';
 import 'homeScreen.dart';
-
  String? token;
-
 class login extends StatelessWidget {
   login({super.key});
-
   TextEditingController userctr = TextEditingController();
   TextEditingController passctr = TextEditingController();
   String url = "https://crm-beta-api.vozlead.in/api/v2/account/login/";
-
   apiPostData(context) async {
     var body = {
       "username": userctr.text.trim(),
@@ -25,12 +22,10 @@ class login extends StatelessWidget {
     print(response.body);
     if (response.statusCode == 200) {
       final res = jsonDecode(response.body);
-
-      final data = LocalStorage();
-
-      token = res["data"]["token"];
-      data.getApi(token!);
-
+      final data=Postmethode.fromJson(res);
+      token=data.data!.token;
+      final data1 = LocalStorage();
+      data1.getApi(token!);
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => const HomeScreen(),
       ));
@@ -39,7 +34,6 @@ class login extends StatelessWidget {
           duration: Duration(milliseconds: 100), content: Text("Wrong")));
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

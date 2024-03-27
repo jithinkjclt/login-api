@@ -1,25 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'Login.dart';
 import 'dataMethode.dart';
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-
 class _HomeScreenState extends State<HomeScreen> {
   String url = "https://crm-beta-api.vozlead.in/api/v2/lead/lead_list/";
-
-  // final headers =
-
   Future<MethodeData> apidata() async {
-
     final response = await http.get(Uri.parse(url), headers: {
       'Authorization': 'token $token',
     });
@@ -124,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                  SizedBox(
+                                SizedBox(
                                   width: 180,
                                   height: 100,
                                   child: Column(
@@ -138,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             width: 10,
                                           ),
                                           Text(
-                                          "jhonathan james",
+                                            "jhonathan james",
                                             style: TextStyle(
                                                 color: Colors.blue,
                                                 fontWeight: FontWeight.bold),
@@ -177,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             width: 10,
                                           ),
                                           Text(
-                                            snapshot.data!.data!.leads![index].mobile!,
+                                            snapshot.data!.data!.leads![index]
+                                                .mobile!,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 12),
@@ -193,10 +186,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                       color: Colors.blue.shade100,
                                       borderRadius: BorderRadius.circular(20)),
-                                  child:  Center(
+                                  child: Center(
                                     child: Text(
-                                      snapshot.data!.data!.leads![index].interest!,
-                                      style: TextStyle(
+                                      snapshot
+                                          .data!.data!.leads![index].interest!,
+                                      style: const TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold),
                                     ),

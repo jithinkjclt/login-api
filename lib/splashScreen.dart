@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login_interface/local_storage.dart';
 import 'Login.dart';
@@ -17,14 +20,17 @@ class _SplashState extends State<Splash> {
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-          builder: (context) => token == null ? login() : HomeScreen()),
+          builder: (context) => token == null ? login() : const HomeScreen()),
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
-    flash(context);
-    super.initState();
+    Timer(Duration(seconds: 4), () {
+      flash(context);
+      super.initState();
+    });
   }
 
   @override
@@ -37,10 +43,11 @@ class _SplashState extends State<Splash> {
               height: 50,
             ),
             Image(image: AssetImage("Assets/Multi-Profile.png")),
-            Text(
-              "Loading",
-              style: TextStyle(fontSize: 15),
-            )
+            CupertinoActivityIndicator(
+              radius: 20,
+              animating: true,
+              // animatingColor: CupertinoColors.activeBlue,
+            ),
           ],
         ),
       ),
